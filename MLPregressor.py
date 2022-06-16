@@ -14,7 +14,7 @@ import timeit
 from sklearn.base import BaseEstimator
 import pandas as pd
 import numpy as np
-import standard.scorers as sc
+import scorers as sc
 
 
 class MLPregressor(BaseEstimator):
