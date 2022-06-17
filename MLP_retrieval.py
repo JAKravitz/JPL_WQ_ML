@@ -29,8 +29,6 @@ class MLPregressor(BaseEstimator):
         self.Xpca = batch_info['Xpca']
     
     def clean(self,data):   
-        # data.fillna(0,inplace=True)
-        # data.replace(np.inf,0)
         data = data.replace([np.inf, -np.inf], np.nan, inplace=False)    
         data = data.dropna(axis=0,how='any',inplace=False)
         return data
@@ -66,7 +64,6 @@ class MLPregressor(BaseEstimator):
 
     def getXY(self,data):
         # get sensor data
-        
         sensors = {'s2_60m':['443','490','560','665','705','740','783','842','865'],
                    's2_20m':['490','560','665','705','740','783','842','865'],
                    's2_10m':['490','560','665','842'],
@@ -138,12 +135,6 @@ class MLPregressor(BaseEstimator):
         return Xt, y2, y
                 
     def build(self):
-    
-        # if self.n_in in [10,20]:
-        #     nhid = 10
-        # else:
-        #     nhid = 60
-        
         self.model = Sequential(
                 [Dense(128, kernel_initializer='normal', input_shape=(self.n_in,)), ReLU(),
                  Dropout(0.2),
@@ -217,7 +208,6 @@ class MLPregressor(BaseEstimator):
 
     def predict(self, X_test):
         tic = timeit.default_timer()
-        #y_hat =  pd.DataFrame(self.model.predict(Xt),index=yt.index.values,columns=yt.columns)
         y_hat = self.model.predict(X_test)
         toc = timeit.default_timer()
         self.pred_time = toc-tic 
@@ -236,13 +226,7 @@ class MLPregressor(BaseEstimator):
         y_hat = self.transform_inverse(y_hat)
         y_test = self.transform_inverse(y_test)
         y_hat = pd.DataFrame(y_hat, columns=self.vars)
-        #y_test = np.exp(y_test)
-        #clus = y_test[:,-1:].astype(int)
-        #y_test = np.where(y_test[:,:-1] == 1, 0, y_test[:,:-1])
-        #y_test = np.hstack((y_test,clus))
         y_test = pd.DataFrame(y_test, columns=self.vars)
-        # clus = np.exp(y_test.cluster)
-        # y_test['cluster'] = clus
     
         for band in self.vars:
             if band in ['cluster']:
@@ -250,12 +234,6 @@ class MLPregressor(BaseEstimator):
 
             y_t = y_test.loc[:,band].astype(float)
             y_h = y_hat.loc[:,band].astype(float)
-            
-            # for PC = 0 instances
-            # true = np.logical_and(y_h > 0, y_t > 0)
-            # true = y_t > 0
-            # y_t = y_t[true]
-            # y_h = y_h[true]
 
             for stat in scoreDict:
                 results[band][q][stat].append(scoreDict[stat](y_t,y_h))
@@ -279,10 +257,6 @@ class MLPregressor(BaseEstimator):
         y_hat = self.transform_inverse(y_hat)
         y_test = self.transform_inverse(y_test)
         y_hat = pd.DataFrame(y_hat, columns=self.vars)
-        #y_test = np.exp(y_test)
-        #clus = y_test[:,-1:].astype(int)
-        #y_test = np.where(y_test[:,:-1] == 1, 0, y_test[:,:-1])
-        #y_test = np.hstack((y_test,clus))
         y_test = pd.DataFrame(y_test, columns=self.vars)
         clus = np.exp(y_test.cluster).astype(int)
         y_test['cluster'] = clus
@@ -309,12 +283,6 @@ class MLPregressor(BaseEstimator):
     
                 y_t = testgroup.loc[:,band].astype(float)
                 y_h = hatgroup.loc[:,band].astype(float)
-                
-                # for PC = 0 instances
-                # true = np.logical_and(y_h > 0, y_t > 0)
-                # true = y_t > 0
-                # y_t = y_t[true]
-                # y_h = y_h[true]
     
                 for stat in scoreDict:
                     results[band]['owt'][c][stat].append(scoreDict[stat](y_t,y_h))
