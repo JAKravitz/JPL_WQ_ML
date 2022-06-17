@@ -145,9 +145,12 @@ class MLPregressor(BaseEstimator):
         #     nhid = 60
         
         self.model = Sequential(
-                [Dense(500, kernel_initializer='normal', input_shape=(self.n_in,)), ReLU(),
-                 Dense(200, kernel_initializer='normal'), ReLU(),
-                 Dense(50, kernel_initializer='normal'), ReLU(),
+                [Dense(128, kernel_initializer='normal', input_shape=(self.n_in,)), ReLU(),
+                 Dropout(0.2),
+                 Dense(64, kernel_initializer='normal'), ReLU(),
+                 Dropout(0.2),
+                 Dense(32, kernel_initializer='normal'), ReLU(),
+                 Dropout(0.2),
                  Dense(self.n_out)
                  ])
         # compile
