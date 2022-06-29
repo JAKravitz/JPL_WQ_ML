@@ -9,3 +9,4 @@ https://drive.google.com/file/d/1nFO_OiN9_cLFXdS1pCnThqg-0MiBHCht/view?usp=shari
 
 Will also attach a 1 hour video for more in depth overview...
 
+MM field data publication: https://doi.org/10.3390/rs5094370
